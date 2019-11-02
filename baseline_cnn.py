@@ -1,10 +1,17 @@
-from torchvision import transforms
+import torch
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 from torch.utils.data.sampler import SubsetRandomSampler
 import numpy as np
-import torch
+from torch.autograd import Variable
 import torch.nn as nn
+import torch.nn.functional as func
+import torch.nn.init as torch_init
+import torch.optim as optim
+import pandas as pd
+import torchvision
+from torchvision import transforms, utils
+import os
 
 class loader(Dataset):
     def __init__(self, csv_file, root_dir, transform=None):
@@ -46,7 +53,7 @@ class Nnet(nn.Module):
             nn.Linear(__, __),
             nn.ReLU( inplace=True),
             nn.Linear(__, 201),
-            nn.Softmax()
+            #nn.Softmax()
         )
 
     def num_flat_features(self, inputs):
