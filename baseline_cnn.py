@@ -70,7 +70,7 @@ class Nnet(nn.Module):
 
     def forward(self, input):
         x=self.main(input)
-        print('yo:', self.num_flat_features(x))
+        #print('yo:', self.num_flat_features(x))
         x=x.view(-1, self.num_flat_features(x))
         
         return self.fc(x)
