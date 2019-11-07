@@ -39,20 +39,20 @@ class Nnet(nn.Module):
         self.main = nn.Sequential(
             nn.Conv2d(3, 21 , 3, stride=2, padding=1, bias=False), 
             nn.ReLU(inplace=True),
-            nn.Conv2d(__, 20, 3,stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(__),
+            nn.Conv2d(21, 20, 3,stride=2, padding=1, bias=False),
+            nn.BatchNorm2d(num_features=20, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
             nn.ReLU(inplace=True),
-            nn.Conv2d(__, 15, 3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(__),
+            nn.Conv2d(20, 15, 3, stride=2, padding=1, bias=False),
+            nn.BatchNorm2d(num_features=15, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
             nn.ReLU( inplace=True),
-            nn.Conv2d(__,7, 5, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(__),
+            nn.Conv2d(15, 7, 5, stride=2, padding=1, bias=False),
+            nn.BatchNorm2d(num_features=7, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
             nn.ReLU( inplace=True),
         )
         self.fc = nn.Sequential(
-            nn.Linear(__, __),
+            nn.Linear(1183,500),
             nn.ReLU( inplace=True),
-            nn.Linear(__, 201),
+            nn.Linear(500, 201),
             #nn.Softmax()
         )
 
@@ -70,7 +70,9 @@ class Nnet(nn.Module):
 
     def forward(self, input):
         x=self.main(input)
+        print('yo:', self.num_flat_features(x))
         x=x.view(-1, self.num_flat_features(x))
+        
         return self.fc(x)
 
         
