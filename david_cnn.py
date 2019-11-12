@@ -2,6 +2,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 from torch.utils.data.sampler import SubsetRandomSampler
+from torch.utils.data.sampler import RandomSampler
 import numpy as np
 from torch.autograd import Variable
 import torch.nn as nn
@@ -59,13 +60,13 @@ class Nnet(nn.Module):
             nn.MaxPool2d(3),
         )
         self.fc = nn.Sequential(
-            nn.Linear(240,500),
+            nn.Linear(240,500), # 240, 500
             nn.ReLU( inplace=True),
-            nn.Linear(500,500),
+            nn.Linear(500,500), # 500, 500
             nn.ReLU( inplace=True),
-            nn.Linear(500,500),
+            nn.Linear(500,500), # 500, 500
             nn.ReLU( inplace=True),
-            nn.Linear(500, 201),
+            nn.Linear(500, 201), # 500, 201
             #nn.Softmax()
         )
 
@@ -83,7 +84,7 @@ class Nnet(nn.Module):
 
     def forward(self, input):
         x=self.main(input)
-        #print('yo:', self.num_flat_features(x))
+        #print('num:', self.num_flat_features(x))
         x=x.view(-1, self.num_flat_features(x))
         
         return self.fc(x)
