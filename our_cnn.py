@@ -2,7 +2,6 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 from torch.utils.data.sampler import SubsetRandomSampler
-from torch.utils.data.sampler import RandomSampler
 import numpy as np
 from torch.autograd import Variable
 import torch.nn as nn
@@ -38,35 +37,24 @@ class Nnet(nn.Module):
     def __init__(self):
         super(Nnet, self).__init__()
         self.main = nn.Sequential(
-            nn.Conv2d(3, 18, 3, stride=1, padding=1, bias=False), 
+            nn.Conv2d(3, 21 , 3, stride=2, padding=1, bias=False), 
             nn.ReLU(inplace=True),
-            nn.Conv2d(18, 30 , 3, stride=1, padding=1, bias=False), 
+            nn.MaxPool2d(3, stride=2),
+            nn.Conv2d(21, 20, 3,stride=2, padding=1, bias=False),
+            nn.BatchNorm2d(num_features=20, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(3),
-            nn.Conv2d(30, 35, 3,stride=1, padding=1, bias=False),
-            nn.Conv2d(35, 40, 3,stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(num_features=40, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(3),
-            nn.Conv2d(40, 45, 3, stride=1, padding=1, bias=False),
-            nn.Conv2d(45, 50, 3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(num_features=50, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
+            nn.MaxPool2d(3, stride=2),
+            nn.Conv2d(20, 15, 3, stride=2, padding=1, bias=False),
+            nn.BatchNorm2d(num_features=15, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
             nn.ReLU( inplace=True),
-            nn.MaxPool2d(3),
-            nn.Conv2d(50, 55, 3, stride=1, padding=1, bias=False),
-            nn.Conv2d(55, 60, 3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(num_features=60, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
+            nn.Conv2d(15, 7, 5, stride=2, padding=1, bias=False),
+            nn.BatchNorm2d(num_features=7, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
             nn.ReLU( inplace=True),
-            nn.MaxPool2d(3),
         )
         self.fc = nn.Sequential(
-            nn.Linear(240,500), # 240, 500
+            nn.Linear(1183,500),
             nn.ReLU( inplace=True),
-            nn.Linear(500,500), # 500, 500
-            nn.ReLU( inplace=True),
-            nn.Linear(500,500), # 500, 500
-            nn.ReLU( inplace=True),
-            nn.Linear(500, 201), # 500, 201
+            nn.Linear(500, 201),
             #nn.Softmax()
         )
 
@@ -84,7 +72,7 @@ class Nnet(nn.Module):
 
     def forward(self, input):
         x=self.main(input)
-        #print('num:', self.num_flat_features(x))
+        #print('yo:', self.num_flat_features(x))
         x=x.view(-1, self.num_flat_features(x))
         
         return self.fc(x)
