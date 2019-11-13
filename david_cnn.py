@@ -2,7 +2,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 from torch.utils.data.sampler import SubsetRandomSampler
-from torch.utils.data.sampler import RandomSampler
+from torch.utils.data.sampler import WeightedRandomSampler
 import numpy as np
 from torch.autograd import Variable
 import torch.nn as nn
