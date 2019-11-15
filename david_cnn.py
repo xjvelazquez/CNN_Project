@@ -13,6 +13,10 @@ import pandas as pd
 import torchvision
 from torchvision import transforms, utils
 import os
+from sklearn.model_selection import StratifiedKFold
+import copy
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
 
 class loader(Dataset):
     def __init__(self, csv_file, root_dir, transform=None):
@@ -60,13 +64,13 @@ class Nnet(nn.Module):
             nn.MaxPool2d(3),
         )
         self.fc = nn.Sequential(
-            nn.Linear(240,500), # 240, 500
+            nn.Linear(240,215), # 240, 500
             nn.ReLU( inplace=True),
-            nn.Linear(500,500), # 500, 500
-            nn.ReLU( inplace=True),
-            nn.Linear(500,500), # 500, 500
-            nn.ReLU( inplace=True),
-            nn.Linear(500, 201), # 500, 201
+            #nn.Linear(500,500), # 500, 500
+            #nn.ReLU( inplace=True),
+            #nn.Linear(230,215), # 500, 500
+            #nn.ReLU( inplace=True),
+            nn.Linear(215, 201), # 500, 201
             #nn.Softmax()
         )
 
